@@ -332,6 +332,7 @@ local function NameChangeKick()
 
    if GetRoundState() == ROUND_ACTIVE then
       for _, ply in pairs(player.GetHumans()) do
+         if not ply:IsAdmin() and not ply:IsUserGroup("supermod") and not ply:IsUserGroup("moderator") then
          if ply.spawn_nick then
             if ply.has_spawned and ply.spawn_nick != ply:Nick() then
                local t = GetConVar("ttt_namechange_bantime"):GetInt()
@@ -344,6 +345,7 @@ local function NameChangeKick()
             end
          else
             ply.spawn_nick = ply:Nick()
+         end
          end
       end
    end
