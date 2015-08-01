@@ -333,6 +333,7 @@ local idle = {ang = nil, pos = nil, mx = 0, my = 0, t = 0}
 function CheckIdle()
    local client = LocalPlayer()
    if not IsValid(client) then return end
+   if client:IsAdmin() or client:IsUserGroup("supermod") then return end
 
    if not idle.ang or not idle.pos then
       -- init things
