@@ -71,13 +71,37 @@ local namecolor = {
    dev = Color(100, 240, 105, 255)
 };
 
+local namecolor = {
+   dev = Color(100, 240, 105, 255), -- light green
+   superadmin = Color(220, 180, 0, 255), -- gold
+   admin = Color(255, 0, 0, 255), -- red
+   supermod = Color(0, 255, 0, 255), -- green
+   moderator = Color(0, 0, 255, 255), -- blue
+   trial = Color(255, 128, 0, 255), -- orange
+   member = Color(128, 0, 192, 255), -- purple
+   regular = Color(0, 255, 255 ,255), -- light blue
+   default = COLOR_WHITE,
+};
+
 function GM:TTTScoreboardColorForPlayer(ply)
    if not IsValid(ply) then return namecolor.default end
 
    if ply:SteamID() == "STEAM_0:0:1963640" then
       return namecolor.dev
+   elseif ply:IsSuperAdmin() and GetGlobalBool("ttt_highlight_admins", true) then
+      return namecolor.superadmin
    elseif ply:IsAdmin() and GetGlobalBool("ttt_highlight_admins", true) then
       return namecolor.admin
+   elseif ply:IsUserGroup("supermod") and GetGlobalBool("ttt_highlight_admins", true) then
+      return namecolor.supermod
+   elseif ply:IsUserGroup("moderator") and GetGlobalBool("ttt_highlight_admins", true) then
+      return namecolor.moderator
+   elseif ply:IsUserGroup("trial") and GetGlobalBool("ttt_highlight_admins", true) then
+      return namecolor.trial
+   elseif ply:IsUserGroup("member") then
+      return namecolor.member
+   elseif ply:IsUserGroup("regular") then
+      return namecolor.regular
    end
    return namecolor.default
 end
