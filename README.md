@@ -107,6 +107,16 @@ git commit -m "Add real disarm"
 git format-patch master --stdout > p_real_disarm.patch
 ```
 
+## Custom Discombobulator
+- Discombobulator now 4x more powerful
+
+```
+git checkout -b custom_discombobulator
+git add gamemodes/terrortown/entities/entities/ttt_confgrenade_proj.lua
+git commit -m "Add custom discombobulator"
+git format-patch master --stdout > p_custom_discombobulator.patch
+```
+
 # Adding patch files to master
 Now that I've created a decent number of patch files, I want to commit those patch files to the master so that I do not lose them, and I can use them in my update script and version them:
 
