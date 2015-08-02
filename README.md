@@ -31,7 +31,6 @@ Here are some examples of the branches I made tonight.
 
 ```
 git checkout -b scoreboard_colors
-# Upload gamemodes/terrortown/gamemode/vgui/sb_row.lua
 git add gamemodes/terrortown/gamemode/vgui/sb_row.lua
 git commit -m "Add scoreboard colors"
 git format-patch master --stdout > p_scoreboard_teams.patch
@@ -43,7 +42,6 @@ git checkout master
 
 ```
 git checkout -b namechangekick_immunity
-# Upload gamemodes/terrortown/gamemode/init.lua
 git add gamemodes/terrortown/gamemode/init.lua
 git commit -m "Add NameChangeKick immunity"
 git format-patch master --stdout > p_namechangekick_immunity.patch
