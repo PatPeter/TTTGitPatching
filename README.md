@@ -154,13 +154,11 @@ cd $WD
 
 WD=`pwd`
 cd $GM1
-git apply p_admin_access.patch
-git apply p_checkidle_immunity.patch
-git apply p_fcvar_userinfo.patch
-git apply p_hastemode_overtime.patch
-git apply p_namechangekick_immunity.patch
-git apply p_real_disarm.patch
-git apply p_scoreboard_colors.patch
+for FILE in `ls p_*`; do
+        echo "Applying $FILE..."
+        git apply $FILE
+        echo ""
+done
 cd $WD
 ```
 
