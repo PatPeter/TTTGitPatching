@@ -1,0 +1,30 @@
+From 17b4a42f3ad3d1db8080f1ca6dcd45d92960b8ce Mon Sep 17 00:00:00 2001
+From: Nicholas Solin <solin.nick@gmail.com>
+Date: Sat, 1 Aug 2015 15:24:26 -0500
+Subject: [PATCH] Add Haste Mode overtime
+
+---
+ gamemodes/terrortown/gamemode/cl_hud.lua |    6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/gamemodes/terrortown/gamemode/cl_hud.lua b/gamemodes/terrortown/gamemode/cl_hud.lua
+index 2b77b13..0a6b284 100755
+--- a/gamemodes/terrortown/gamemode/cl_hud.lua
++++ b/gamemodes/terrortown/gamemode/cl_hud.lua
+@@ -281,12 +281,8 @@ local function InfoPaint(client)
+       if hastetime < 0 then
+          if (not is_traitor) or (math.ceil(CurTime()) % 7 <= 2) then
+             -- innocent or blinking "overtime"
+-            text = L.overtime
++            text  = "OT" .. util.SimpleTime(math.abs(endtime), "%02i:%02i")
+             font = "Trebuchet18"
+-
+-            -- need to hack the position a little because of the font switch
+-            ry = ry + 5
+-            rx = rx - 3
+          else
+             -- traitor and not blinking "overtime" right now, so standard endtime display
+             text  = util.SimpleTime(math.max(0, endtime), "%02i:%02i")
+-- 
+1.7.9.5
+
