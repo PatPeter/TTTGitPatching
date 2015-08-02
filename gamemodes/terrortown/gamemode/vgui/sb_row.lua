@@ -23,7 +23,19 @@ function PANEL:Init()
    self:AddColumn( GetTranslation("sb_score"), function(ply) return ply:Frags() end )
 
    if KARMA.IsEnabled() then
-      self:AddColumn( GetTranslation("sb_karma"), function(ply) return math.Round(ply:GetBaseKarma()) end )
+      self:AddColumn( GetTranslation("sb_karma"), function(ply, lbl) 
+         local karma = math.Round(ply:GetBaseKarma())
+         
+         local c = hook.Call("TTTScoreboardColorForKarma", GAMEMODE, karma)
+
+         -- verify that we got a proper color
+         if c and type(c) == "table" and c.r and c.b and c.g and c.a then
+               lbl:SetTextColor(c)
+         else
+               ErrorNoHalt("TTTScoreboardColorForKarma hook returned something that isn't a color!\n")
+         end
+         return karma
+      end )
    end
 
    -- Let hooks add their custom columns
@@ -63,13 +75,6 @@ function PANEL:AddColumn( label, func, width )
    table.insert( self.cols, lbl )
    return lbl
 end
-
-
-local namecolor = {
-   default = COLOR_WHITE,
-   admin = Color(220, 180, 0, 255),
-   dev = Color(100, 240, 105, 255)
-};
 
 local namecolor = {
    dev = Color(100, 240, 105, 255), -- light green
@@ -118,6 +123,41 @@ local function ColorForPlayer(ply)
       end
    end
    return namecolor.default
+end
+
+local karmacolors = {
+   max  = Color(0,255,0,255),
+   high = Color(255,240,135,255),
+   med  = Color(245,220,60,255),
+   low  = Color(255,180,0,255),
+   min  = Color(255,130,0,255),
+   default = Color(255,255,255,255),
+};
+
+function GM:TTTScoreboardColorForKarma(karma)
+   if karma > 890 then
+      return karmacolors.max
+   elseif karma > 800 then
+      return karmacolors.high
+   elseif karma > 650 then
+      return karmacolors.med
+   elseif karma > 500 then
+      return karmacolors.low
+   else
+      return karmacolors.min
+   end
+end
+
+local function ColorForKarma(karma)
+   local c = hook.Call("TTTScoreboardColorForKarma", GAMEMODE, karma)
+
+   -- verify that we got a proper color
+   if c and type(c) == "table" and c.r and c.b and c.g and c.a then
+      return c
+   else
+      ErrorNoHalt("TTTScoreboardColorForKarma hook returned something that isn't a color!\n")
+   end
+   return karmacolors.default
 end
 
 function PANEL:Paint()
