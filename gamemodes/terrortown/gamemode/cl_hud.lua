@@ -281,8 +281,12 @@ local function InfoPaint(client)
       if hastetime < 0 then
          if (not is_traitor) or (math.ceil(CurTime()) % 7 <= 2) then
             -- innocent or blinking "overtime"
-            text  = "OT" .. util.SimpleTime(math.abs(endtime), "%02i:%02i")
-            font = "Trebuchet18"
+            text  = "OT " .. util.SimpleTime(math.abs(hastetime), "%02i:%02i")
+            font = "Trebuchet22"
+
+            -- need to hack the position a little because of the font switch
+            -- ry = ry + 5
+            -- rx = rx - 3
          else
             -- traitor and not blinking "overtime" right now, so standard endtime display
             text  = util.SimpleTime(math.max(0, endtime), "%02i:%02i")
