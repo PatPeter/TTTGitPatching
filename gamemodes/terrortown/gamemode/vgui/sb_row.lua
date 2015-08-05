@@ -126,16 +126,20 @@ local function ColorForPlayer(ply)
 end
 
 local karmacolors = {
-   max  = Color(0,255,0,255),
-   high = Color(255,240,135,255),
-   med  = Color(245,220,60,255),
-   low  = Color(255,180,0,255),
-   min  = Color(255,130,0,255),
-   default = Color(255,255,255,255),
+   default = Color(255,255,255,255), -- white
+   top  = Color(102,255,51,255), -- bright green
+   max  = Color(130,255,130,255), -- light green
+   high = Color(255,240,135,255), -- light yellow
+   med  = Color(245,220,60,255), -- dark yellow
+   low  = Color(255,180,0,255), -- light orange
+   min  = Color(255,130,0,255), -- dark orange
+   bottom = Color(204,0,0,255), -- dark red
 };
 
 function GM:TTTScoreboardColorForKarma(karma)
-   if karma > 890 then
+   if karma > 990 then
+      return karmacolors.top
+   elseif karma > 890 then
       return karmacolors.max
    elseif karma > 800 then
       return karmacolors.high
@@ -143,8 +147,10 @@ function GM:TTTScoreboardColorForKarma(karma)
       return karmacolors.med
    elseif karma > 500 then
       return karmacolors.low
-   else
+   elseif karma > 200 then
       return karmacolors.min
+   else
+      return karmacolors.bottom
    end
 end
 
