@@ -452,13 +452,13 @@ if SERVER then
             picked = picked + 1
          end
       end
-      
+
       -- table.foreach(self.SafeWires, function(_index)
       --   print(tostring(_index) .. " " .. tostring(self.SafeWires[_index]))
       -- end)
-      
+
       local wirenames = {"Red","Yellow","Blue","White","Green","Orange"}
-      
+
       local safe_list = "";
       table.foreach(self.SafeWires, function(_index)
          if safe_list == "" then
@@ -469,7 +469,7 @@ if SERVER then
             safe_list = safe_list .. ", " .. wirenames[_index]
          end
       end)
-      
+
       local bad_list = "";
       table.foreach(wirenames, function(_index)
         if not self.SafeWires[_index] then
@@ -482,7 +482,7 @@ if SERVER then
            end
          end
       end)
-      
+
       ply:ChatPrint(safe_list .. " will defuse the C4.")
       ply:ChatPrint(bad_list .. " will trigger the C4.")
 
