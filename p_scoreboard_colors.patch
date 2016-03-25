@@ -1,0 +1,205 @@
+From 332dcc8392e9bce967933abcdf2aae3ae3f0a453 Mon Sep 17 00:00:00 2001
+From: Nicholas Solin <solin.nick@gmail.com>
+Date: Sat, 1 Aug 2015 13:25:27 -0500
+Subject: [PATCH 1/3] Add scoreboard colors
+
+---
+ gamemodes/terrortown/gamemode/vgui/sb_row.lua |   24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/gamemodes/terrortown/gamemode/vgui/sb_row.lua b/gamemodes/terrortown/gamemode/vgui/sb_row.lua
+index a18a8f9..ea4faee 100755
+--- a/gamemodes/terrortown/gamemode/vgui/sb_row.lua
++++ b/gamemodes/terrortown/gamemode/vgui/sb_row.lua
+@@ -71,13 +71,37 @@ local namecolor = {
+    dev = Color(100, 240, 105, 255)
+ };
+ 
++local namecolor = {
++   dev = Color(100, 240, 105, 255), -- light green
++   superadmin = Color(220, 180, 0, 255), -- gold
++   admin = Color(255, 0, 0, 255), -- red
++   supermod = Color(0, 255, 0, 255), -- green
++   moderator = Color(0, 0, 255, 255), -- blue
++   trial = Color(255, 128, 0, 255), -- orange
++   member = Color(128, 0, 192, 255), -- purple
++   regular = Color(0, 255, 255 ,255), -- light blue
++   default = COLOR_WHITE,
++};
++
+ function GM:TTTScoreboardColorForPlayer(ply)
+    if not IsValid(ply) then return namecolor.default end
+ 
+    if ply:SteamID() == "STEAM_0:0:1963640" then
+       return namecolor.dev
++   elseif ply:IsSuperAdmin() and GetGlobalBool("ttt_highlight_admins", true) then
++      return namecolor.superadmin
+    elseif ply:IsAdmin() and GetGlobalBool("ttt_highlight_admins", true) then
+       return namecolor.admin
++   elseif ply:IsUserGroup("supermod") and GetGlobalBool("ttt_highlight_admins", true) then
++      return namecolor.supermod
++   elseif ply:IsUserGroup("moderator") and GetGlobalBool("ttt_highlight_admins", true) then
++      return namecolor.moderator
++   elseif ply:IsUserGroup("trial") and GetGlobalBool("ttt_highlight_admins", true) then
++      return namecolor.trial
++   elseif ply:IsUserGroup("member") then
++      return namecolor.member
++   elseif ply:IsUserGroup("regular") then
++      return namecolor.regular
+    end
+    return namecolor.default
+ end
+-- 
+1.7.9.5
+
+
+From 607e76d7e44c6417278cb9de66471f79fc1363b0 Mon Sep 17 00:00:00 2001
+From: Nicholas Solin <solin.nick@gmail.com>
+Date: Sat, 1 Aug 2015 22:18:56 -0500
+Subject: [PATCH 2/3] Add karma colors
+
+---
+ gamemodes/terrortown/gamemode/vgui/sb_row.lua |   56 +++++++++++++++++++++----
+ 1 file changed, 48 insertions(+), 8 deletions(-)
+
+diff --git a/gamemodes/terrortown/gamemode/vgui/sb_row.lua b/gamemodes/terrortown/gamemode/vgui/sb_row.lua
+index ea4faee..e8c568e 100755
+--- a/gamemodes/terrortown/gamemode/vgui/sb_row.lua
++++ b/gamemodes/terrortown/gamemode/vgui/sb_row.lua
+@@ -23,7 +23,19 @@ function PANEL:Init()
+    self:AddColumn( GetTranslation("sb_score"), function(ply) return ply:Frags() end )
+ 
+    if KARMA.IsEnabled() then
+-      self:AddColumn( GetTranslation("sb_karma"), function(ply) return math.Round(ply:GetBaseKarma()) end )
++      self:AddColumn( GetTranslation("sb_karma"), function(ply, lbl) 
++         local karma = math.Round(ply:GetBaseKarma())
++         
++         local c = hook.Call("TTTScoreboardColorForKarma", GAMEMODE, karma)
++
++         -- verify that we got a proper color
++         if c and type(c) == "table" and c.r and c.b and c.g and c.a then
++               lbl:SetTextColor(c)
++         else
++               ErrorNoHalt("TTTScoreboardColorForKarma hook returned something that isn't a color!\n")
++         end
++         return karma
++      end )
+    end
+ 
+    -- Let hooks add their custom columns
+@@ -64,13 +76,6 @@ function PANEL:AddColumn( label, func, width )
+    return lbl
+ end
+ 
+-
+-local namecolor = {
+-   default = COLOR_WHITE,
+-   admin = Color(220, 180, 0, 255),
+-   dev = Color(100, 240, 105, 255)
+-};
+-
+ local namecolor = {
+    dev = Color(100, 240, 105, 255), -- light green
+    superadmin = Color(220, 180, 0, 255), -- gold
+@@ -120,6 +125,41 @@ local function ColorForPlayer(ply)
+    return namecolor.default
+ end
+ 
++local karmacolors = {
++   max  = Color(0,255,0,255),
++   high = Color(255,240,135,255),
++   med  = Color(245,220,60,255),
++   low  = Color(255,180,0,255),
++   min  = Color(255,130,0,255),
++   default = Color(255,255,255,255),
++};
++
++function GM:TTTScoreboardColorForKarma(karma)
++   if karma > 890 then
++      return karmacolors.max
++   elseif karma > 800 then
++      return karmacolors.high
++   elseif karma > 650 then
++      return karmacolors.med
++   elseif karma > 500 then
++      return karmacolors.low
++   else
++      return karmacolors.min
++   end
++end
++
++local function ColorForKarma(karma)
++   local c = hook.Call("TTTScoreboardColorForKarma", GAMEMODE, karma)
++
++   -- verify that we got a proper color
++   if c and type(c) == "table" and c.r and c.b and c.g and c.a then
++      return c
++   else
++      ErrorNoHalt("TTTScoreboardColorForKarma hook returned something that isn't a color!\n")
++   end
++   return karmacolors.default
++end
++
+ function PANEL:Paint()
+    if not IsValid(self.Player) then return end
+ 
+-- 
+1.7.9.5
+
+
+From 2b0e77f44d4c8ffb8b0f1af37b9c91f00a01395b Mon Sep 17 00:00:00 2001
+From: Nicholas Solin <solin.nick@gmail.com>
+Date: Tue, 4 Aug 2015 19:28:25 -0500
+Subject: [PATCH 3/3] Add colors for >1000 and <200 karma
+
+---
+ gamemodes/terrortown/gamemode/vgui/sb_row.lua |   22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
+
+diff --git a/gamemodes/terrortown/gamemode/vgui/sb_row.lua b/gamemodes/terrortown/gamemode/vgui/sb_row.lua
+index e8c568e..2e74eab 100755
+--- a/gamemodes/terrortown/gamemode/vgui/sb_row.lua
++++ b/gamemodes/terrortown/gamemode/vgui/sb_row.lua
+@@ -126,16 +126,20 @@ local function ColorForPlayer(ply)
+ end
+ 
+ local karmacolors = {
+-   max  = Color(0,255,0,255),
+-   high = Color(255,240,135,255),
+-   med  = Color(245,220,60,255),
+-   low  = Color(255,180,0,255),
+-   min  = Color(255,130,0,255),
+-   default = Color(255,255,255,255),
++   default = Color(255,255,255,255), -- white
++   top  = Color(102,255,51,255), -- bright green
++   max  = Color(130,255,130,255), -- light green
++   high = Color(255,240,135,255), -- light yellow
++   med  = Color(245,220,60,255), -- dark yellow
++   low  = Color(255,180,0,255), -- light orange
++   min  = Color(255,130,0,255), -- dark orange
++   bottom = Color(204,0,0,255), -- dark red
+ };
+ 
+ function GM:TTTScoreboardColorForKarma(karma)
+-   if karma > 890 then
++   if karma > 990 then
++      return karmacolors.top
++   elseif karma > 890 then
+       return karmacolors.max
+    elseif karma > 800 then
+       return karmacolors.high
+@@ -143,8 +147,10 @@ function GM:TTTScoreboardColorForKarma(karma)
+       return karmacolors.med
+    elseif karma > 500 then
+       return karmacolors.low
+-   else
++   elseif karma > 200 then
+       return karmacolors.min
++   else
++      return karmacolors.bottom
+    end
+ end
+ 
+-- 
+1.7.9.5
+
