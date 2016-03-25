@@ -1,0 +1,32 @@
+From 79815c123bbcf1ef0ef0cd10657f847582ca5758 Mon Sep 17 00:00:00 2001
+From: Nicholas Solin <solin.nick@gmail.com>
+Date: Sat, 1 Aug 2015 13:55:35 -0500
+Subject: [PATCH] Add NameChangeKick immunity
+
+---
+ gamemodes/terrortown/gamemode/init.lua |    2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/gamemodes/terrortown/gamemode/init.lua b/gamemodes/terrortown/gamemode/init.lua
+index 49ac648..2bd6179 100755
+--- a/gamemodes/terrortown/gamemode/init.lua
++++ b/gamemodes/terrortown/gamemode/init.lua
+@@ -332,6 +332,7 @@ local function NameChangeKick()
+ 
+    if GetRoundState() == ROUND_ACTIVE then
+       for _, ply in pairs(player.GetHumans()) do
++         if not ply:IsAdmin() and not ply:IsUserGroup("supermod") and not ply:IsUserGroup("moderator") then
+          if ply.spawn_nick then
+             if ply.has_spawned and ply.spawn_nick != ply:Nick() then
+                local t = GetConVar("ttt_namechange_bantime"):GetInt()
+@@ -345,6 +346,7 @@ local function NameChangeKick()
+          else
+             ply.spawn_nick = ply:Nick()
+          end
++         end
+       end
+    end
+ end
+-- 
+1.7.9.5
+
