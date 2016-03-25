@@ -1,0 +1,27 @@
+From 9071d95b60b00f17df7796325e876ae1e22aa03b Mon Sep 17 00:00:00 2001
+From: Nicholas Solin <solin.nick@gmail.com>
+Date: Sat, 1 Aug 2015 15:31:32 -0500
+Subject: [PATCH] Add FCVAR_USERINFO
+
+---
+ gamemodes/terrortown/gamemode/cl_help.lua |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/gamemodes/terrortown/gamemode/cl_help.lua b/gamemodes/terrortown/gamemode/cl_help.lua
+index 60988c4..55d1cc5 100755
+--- a/gamemodes/terrortown/gamemode/cl_help.lua
++++ b/gamemodes/terrortown/gamemode/cl_help.lua
+@@ -3,8 +3,8 @@
+ local GetTranslation = LANG.GetTranslation
+ local GetPTranslation = LANG.GetParamTranslation
+ 
+-CreateConVar("ttt_spectator_mode", "0", FCVAR_ARCHIVE)
+-CreateConVar("ttt_mute_team_check", "0")
++CreateConVar("ttt_spectator_mode", "0", {FCVAR_ARCHIVE, FCVAR_USERINFO})
++CreateConVar("ttt_mute_team_check", "0", {FCVAR_ARCHIVE, FCVAR_USERINFO})
+ 
+ CreateClientConVar("ttt_avoid_detective", "0", true, true)
+ 
+-- 
+1.7.9.5
+
