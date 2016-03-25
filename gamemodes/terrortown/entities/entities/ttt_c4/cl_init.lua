@@ -448,7 +448,7 @@ function ShowC4Disarm(bomb)
                     end
 
                     if IsValid(bomb) then
-                       RunConsoleCommand("ttt_c4_disarm", tostring(bomb:EntIndex()), tostring(idx))
+                       RunConsoleCommand("ttt_c4_real_disarm", tostring(bomb:EntIndex()), tostring(idx))
                     end
                  end
 end

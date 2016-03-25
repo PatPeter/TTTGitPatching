@@ -437,7 +437,6 @@ if SERVER then
 
       -- random selection process, lot like traitor selection
       local safe_count = self.SafeWiresForTime(time)
-      local safes = {}
       local picked = 0
       while picked < safe_count do
          local pick = math.random(1, #choices)
@@ -456,6 +455,35 @@ if SERVER then
 
       -- send indicator to traitors
       self:SendWarn(true)
+
+      local wirenames = {"Red","Yellow","Blue","White","Green","Orange"}
+
+      local safe_list = "";
+      table.foreach(self.SafeWires, function(_index)
+         if safe_list == "" then
+            safe_list = wirenames[_index]
+         elseif _index == #self.SafeWires then
+            safe_list = safe_list .. ", and " .. wirenames[_index]
+         else
+            safe_list = safe_list .. ", " .. wirenames[_index]
+         end
+      end)
+
+      local bad_list = "";
+      table.foreach(wirenames, function(_index)
+        if not self.SafeWires[_index] then
+           if bad_list == "" then
+              bad_list = wirenames[_index]
+           elseif _index == C4_WIRE_COUNT - #self.SafeWires then
+              bad_list = bad_list .. ", and " .. wirenames[_index]
+           else
+              bad_list = bad_list .. ", " .. wirenames[_index]
+           end
+         end
+      end)
+
+      ply:ChatPrint(safe_list .. " will defuse the C4.")
+      ply:ChatPrint(bad_list .. " will trigger the C4.")
    end
 
    function ENT:ShowC4Config(ply)
@@ -510,7 +538,7 @@ if SERVER then
       if IsValid(bomb) and bomb:GetClass() == "ttt_c4" and not bomb.DisarmCausedExplosion and bomb:GetArmed() then
          if bomb:GetPos():Distance(ply:GetPos()) > 256 then
             return
-         elseif bomb.SafeWires[wire] or ply:IsTraitor() or ply == bomb:GetOwner() then
+         elseif bomb.SafeWires[wire] then
             LANG.Msg(ply, "c4_disarmed")
 
             bomb:Disarm(ply)
@@ -525,7 +553,7 @@ if SERVER then
          end
       end
    end
-   concommand.Add("ttt_c4_disarm", ReceiveC4Disarm)
+   concommand.Add("ttt_c4_real_disarm", ReceiveC4Disarm)
 
 
    local function ReceiveC4Pickup(ply, cmd, args)
