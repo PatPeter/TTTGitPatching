@@ -1,0 +1,52 @@
+From d4200ee8fe1a768a1c39c367db73d0f2d768d40c Mon Sep 17 00:00:00 2001
+From: Nicholas Solin <solin.nick@gmail.com>
+Date: Sat, 1 Aug 2015 15:39:06 -0500
+Subject: [PATCH] Add admin access
+
+---
+ gamemodes/terrortown/gamemode/admin.lua |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/gamemodes/terrortown/gamemode/admin.lua b/gamemodes/terrortown/gamemode/admin.lua
+index ae0657e..3d62978 100755
+--- a/gamemodes/terrortown/gamemode/admin.lua
++++ b/gamemodes/terrortown/gamemode/admin.lua
+@@ -25,7 +25,7 @@ local function TraitorSort(a,b)
+ end
+ 
+ function PrintTraitors(ply)
+-   if not IsValid(ply) or ply:IsSuperAdmin() then
++   if not IsValid(ply) or ply:IsAdmin() then
+       ServerLog(Format("%s used ttt_print_traitors\n", IsValid(ply) and ply:Nick() or "console"))
+ 
+       local pr = GetPrintFn(ply)
+@@ -55,7 +55,7 @@ concommand.Add("ttt_print_usergroups", PrintGroups)
+ function PrintReport(ply)
+    local pr = GetPrintFn(ply)
+ 
+-   if not IsValid(ply) or ply:IsSuperAdmin() then
++   if not IsValid(ply) or ply:IsAdmin() then
+       ServerLog(Format("%s used ttt_print_adminreport\n", IsValid(ply) and ply:Nick() or "console"))
+ 
+       for k, e in pairs(SCORE.Events) do
+@@ -78,7 +78,7 @@ concommand.Add("ttt_print_adminreport", PrintReport)
+ local function PrintKarma(ply)
+    local pr = GetPrintFn(ply)
+ 
+-   if (not IsValid(ply)) or ply:IsSuperAdmin() then
++   if (not IsValid(ply)) or ply:IsAdmin() then
+       ServerLog(Format("%s used ttt_print_karma\n", IsValid(ply) and ply:Nick() or "console"))
+ 
+       KARMA.PrintAll(pr)
+@@ -105,7 +105,7 @@ local dmglog_save    = CreateConVar("ttt_damagelog_save", "0")
+ local function PrintDamageLog(ply)
+    local pr = GetPrintFn(ply)
+ 
+-   if (not IsValid(ply)) or ply:IsSuperAdmin() or GetRoundState() != ROUND_ACTIVE then
++   if (not IsValid(ply)) or ply:IsAdmin() or GetRoundState() != ROUND_ACTIVE then
+       ServerLog(Format("%s used ttt_print_damagelog\n", IsValid(ply) and ply:Nick() or "console"))
+       pr("*** Damage log:\n")
+ 
+-- 
+1.7.9.5
+

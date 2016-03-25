@@ -1,0 +1,27 @@
+From feddbdbd5c656a6049120412573794189630c8e8 Mon Sep 17 00:00:00 2001
+From: Nicholas Solin <solin.nick@gmail.com>
+Date: Sun, 2 Aug 2015 11:57:35 -0500
+Subject: [PATCH] Add custom discombobulator
+
+---
+ .../entities/entities/ttt_confgrenade_proj.lua     |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/gamemodes/terrortown/entities/entities/ttt_confgrenade_proj.lua b/gamemodes/terrortown/entities/entities/ttt_confgrenade_proj.lua
+index 939bc7a..5cdc3c0 100755
+--- a/gamemodes/terrortown/entities/entities/ttt_confgrenade_proj.lua
++++ b/gamemodes/terrortown/entities/entities/ttt_confgrenade_proj.lua
+@@ -9,8 +9,8 @@ local ttt_allow_jump = CreateConVar("ttt_allow_discomb_jump", "0")
+ 
+ local function PushPullRadius(pos, pusher)
+    local radius = 400
+-   local phys_force = 1500
+-   local push_force = 256
++   local phys_force = 30000 -- 1500
++   local push_force = 1024 -- 256
+ 
+    -- pull physics objects and push players
+    for k, target in pairs(ents.FindInSphere(pos, radius)) do
+-- 
+1.7.9.5
+

@@ -1,0 +1,24 @@
+From ce29e07ca99014614085294c9b9ca0d521829a77 Mon Sep 17 00:00:00 2001
+From: Nicholas Solin <solin.nick@gmail.com>
+Date: Sat, 1 Aug 2015 14:49:57 -0500
+Subject: [PATCH] Add CheckIdle immunity
+
+---
+ gamemodes/terrortown/gamemode/cl_init.lua |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/gamemodes/terrortown/gamemode/cl_init.lua b/gamemodes/terrortown/gamemode/cl_init.lua
+index 9a93c36..7ef168f 100755
+--- a/gamemodes/terrortown/gamemode/cl_init.lua
++++ b/gamemodes/terrortown/gamemode/cl_init.lua
+@@ -333,6 +333,7 @@ local idle = {ang = nil, pos = nil, mx = 0, my = 0, t = 0}
+ function CheckIdle()
+    local client = LocalPlayer()
+    if not IsValid(client) then return end
++   if client:IsAdmin() or client:IsUserGroup("supermod") then return end
+ 
+    if not idle.ang or not idle.pos then
+       -- init things
+-- 
+1.7.9.5
+
