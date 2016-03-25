@@ -1,12 +1,12 @@
-From 5bdc928465240a9777234b837223a169f72e0c4a Mon Sep 17 00:00:00 2001
+From d09c56bb6dd613850d298a1af40eca0fc8b274ba Mon Sep 17 00:00:00 2001
 From: Nicholas Solin <solin.nick@gmail.com>
-Date: Sat, 1 Aug 2015 21:12:35 -0500
-Subject: [PATCH] Add real disarm
+Date: Fri, 25 Mar 2016 16:17:44 -0500
+Subject: [PATCH] Add new branch b/c git apply fails
 
 ---
  .../entities/entities/ttt_c4/cl_init.lua           |    2 +-
- .../terrortown/entities/entities/ttt_c4/shared.lua |   38 ++++++++++++++++++--
- 2 files changed, 36 insertions(+), 4 deletions(-)
+ .../terrortown/entities/entities/ttt_c4/shared.lua |   34 ++++++++++++++++++--
+ 2 files changed, 32 insertions(+), 4 deletions(-)
 
 diff --git a/gamemodes/terrortown/entities/entities/ttt_c4/cl_init.lua b/gamemodes/terrortown/entities/entities/ttt_c4/cl_init.lua
 index 0d343ee..48dc7e8 100755
@@ -22,7 +22,7 @@ index 0d343ee..48dc7e8 100755
                   end
  end
 diff --git a/gamemodes/terrortown/entities/entities/ttt_c4/shared.lua b/gamemodes/terrortown/entities/entities/ttt_c4/shared.lua
-index a4df292..731e447 100755
+index a9d459b..7463bfa 100755
 --- a/gamemodes/terrortown/entities/entities/ttt_c4/shared.lua
 +++ b/gamemodes/terrortown/entities/entities/ttt_c4/shared.lua
 @@ -437,7 +437,6 @@ if SERVER then
@@ -33,17 +33,13 @@ index a4df292..731e447 100755
        local picked = 0
        while picked < safe_count do
           local pick = math.random(1, #choices)
-@@ -453,6 +452,39 @@ if SERVER then
-             picked = picked + 1
-          end
-       end
-+      
-+      -- table.foreach(self.SafeWires, function(_index)
-+      --   print(tostring(_index) .. " " .. tostring(self.SafeWires[_index]))
-+      -- end)
-+      
+@@ -456,6 +455,35 @@ if SERVER then
+ 
+       -- send indicator to traitors
+       self:SendWarn(true)
++
 +      local wirenames = {"Red","Yellow","Blue","White","Green","Orange"}
-+      
++
 +      local safe_list = "";
 +      table.foreach(self.SafeWires, function(_index)
 +         if safe_list == "" then
@@ -54,7 +50,7 @@ index a4df292..731e447 100755
 +            safe_list = safe_list .. ", " .. wirenames[_index]
 +         end
 +      end)
-+      
++
 +      local bad_list = "";
 +      table.foreach(wirenames, function(_index)
 +        if not self.SafeWires[_index] then
@@ -67,14 +63,14 @@ index a4df292..731e447 100755
 +           end
 +         end
 +      end)
-+      
++
 +      ply:ChatPrint(safe_list .. " will defuse the C4.")
 +      ply:ChatPrint(bad_list .. " will trigger the C4.")
+    end
  
-       -- send indicator to traitors
-       self:SendWarn(true)
-@@ -510,7 +542,7 @@ if SERVER then
-       if IsValid(bomb) and bomb:GetArmed() then
+    function ENT:ShowC4Config(ply)
+@@ -510,7 +538,7 @@ if SERVER then
+       if IsValid(bomb) and bomb:GetClass() == "ttt_c4" and not bomb.DisarmCausedExplosion and bomb:GetArmed() then
           if bomb:GetPos():Distance(ply:GetPos()) > 256 then
              return
 -         elseif bomb.SafeWires[wire] or ply:IsTraitor() or ply == bomb:GetOwner() then
@@ -82,7 +78,7 @@ index a4df292..731e447 100755
              LANG.Msg(ply, "c4_disarmed")
  
              bomb:Disarm(ply)
-@@ -525,7 +557,7 @@ if SERVER then
+@@ -525,7 +553,7 @@ if SERVER then
           end
        end
     end
