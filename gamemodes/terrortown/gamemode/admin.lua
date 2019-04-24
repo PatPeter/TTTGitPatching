@@ -25,7 +25,7 @@ local function TraitorSort(a,b)
 end
 
 function PrintTraitors(ply)
-   if not IsValid(ply) or ply:IsSuperAdmin() then
+   if not IsValid(ply) or ply:IsAdmin() then
       ServerLog(Format("%s used ttt_print_traitors\n", IsValid(ply) and ply:Nick() or "console"))
 
       local pr = GetPrintFn(ply)
@@ -55,12 +55,12 @@ concommand.Add("ttt_print_usergroups", PrintGroups)
 function PrintReport(ply)
    local pr = GetPrintFn(ply)
 
-   if not IsValid(ply) or ply:IsSuperAdmin() then
+   if not IsValid(ply) or ply:IsAdmin() then
       ServerLog(Format("%s used ttt_print_adminreport\n", IsValid(ply) and ply:Nick() or "console"))
 
       for k, e in pairs(SCORE.Events) do
          if e.id == EVENT_KILL then
-            if e.att.uid == -1 then
+            if e.att.sid == -1 then
                pr("<something> killed " .. e.vic.ni .. (e.vic.tr and " [TRAITOR]" or " [inno.]"))
             else
                pr(e.att.ni .. (e.att.tr and " [TRAITOR]" or " [inno.]") .. " killed " .. e.vic.ni .. (e.vic.tr and " [TRAITOR]" or " [inno.]"))
@@ -78,7 +78,7 @@ concommand.Add("ttt_print_adminreport", PrintReport)
 local function PrintKarma(ply)
    local pr = GetPrintFn(ply)
 
-   if (not IsValid(ply)) or ply:IsSuperAdmin() then
+   if (not IsValid(ply)) or ply:IsAdmin() then
       ServerLog(Format("%s used ttt_print_karma\n", IsValid(ply) and ply:Nick() or "console"))
 
       KARMA.PrintAll(pr)
@@ -105,7 +105,7 @@ local dmglog_save    = CreateConVar("ttt_damagelog_save", "0")
 local function PrintDamageLog(ply)
    local pr = GetPrintFn(ply)
 
-   if (not IsValid(ply)) or ply:IsSuperAdmin() or GetRoundState() != ROUND_ACTIVE then
+   if (not IsValid(ply)) or ply:IsAdmin() or GetRoundState() != ROUND_ACTIVE then
       ServerLog(Format("%s used ttt_print_damagelog\n", IsValid(ply) and ply:Nick() or "console"))
       pr("*** Damage log:\n")
 
