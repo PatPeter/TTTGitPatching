@@ -29,7 +29,6 @@ L.win_showreport   = "Let's look at the round report for {num} seconds."
 
 L.limit_round      = "Round limit reached. {mapname} will load soon."
 L.limit_time       = "Time limit reached. {mapname} will load soon."
-L.limit_vote       = "Round or time limit reached. Voting time!"
 L.limit_left       = "{num} round(s) or {time} minutes remaining before the map changes to {mapname}."
 
 --- Credit awards
@@ -143,10 +142,6 @@ L.radio_button_steps   = "Footsteps"
 
 -- Intro screen shown after joining
 L.intro_help     = "If you're new to the game, press F1 for instructions!"
-
--- "Continue playing" vote
-L.contvote_continue = "Continue playing this"
-L.contvote_change   = "Start a vote"
 
 -- Radiocommands/quickchat
 L.quick_title   = "Quickchat keys"
@@ -607,6 +602,7 @@ L.radar_hud    = "Radar ready for next scan in: {time}"
 -- Spectator muting of living/dead
 L.mute_living  = "Living players muted"
 L.mute_specs   = "Spectators muted"
+L.mute_all     = "All muted"
 L.mute_off     = "None muted"
 
 -- Spectators and prop possession
@@ -1060,3 +1056,28 @@ L.set_cross_size = "Crosshair size"
 
 --- 5-25-15
 L.hat_retrieve = "You picked up a Detective's hat."
+
+--- 3-9-2017
+L.sb_sortby = "Sort By:"
+
+--- 2018-07-24
+L.equip_tooltip_main = "Equipment menu"
+L.equip_tooltip_radar = "Radar control"
+L.equip_tooltip_disguise = "Disguise control"
+L.equip_tooltip_radio = "Radio control"
+L.equip_tooltip_xfer = "Transfer credits"
+
+L.confgrenade_name = "Discombobulator"
+L.polter_name = "Poltergeist"
+L.stungun_name = "UMP Prototype"
+
+L.knife_instant = "INSTANT KILL"
+
+L.dna_hud_type = "TYPE"
+L.dna_hud_body = "BODY"
+L.dna_hud_item = "ITEM"
+
+L.binoc_zoom_level = "LEVEL"
+L.binoc_body = "BODY DETECTED"
+
+L.idle_popup_title = "Idle"
