@@ -9,8 +9,8 @@ local ttt_allow_jump = CreateConVar("ttt_allow_discomb_jump", "0")
 
 local function PushPullRadius(pos, pusher)
    local radius = 400
-   local phys_force = 1500
-   local push_force = 256
+   local phys_force = 30000 -- 1500
+   local push_force = 1024 -- 256
 
    -- pull physics objects and push players
    for k, target in pairs(ents.FindInSphere(pos, radius)) do

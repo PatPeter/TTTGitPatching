@@ -228,12 +228,12 @@ local function InfoPaint(client)
    local health = math.max(0, client:Health())
    local health_y = y + margin
 
-   PaintBar(x + margin, health_y, bar_width, bar_height, health_colors, health/100)
+   PaintBar(x + margin, health_y, bar_width, bar_height, health_colors, health/client:GetMaxHealth())
 
    ShadowedText(tostring(health), "HealthAmmo", bar_width, health_y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_RIGHT)
 
    if ttt_health_label:GetBool() then
-      local health_status = util.HealthToString(health)
+      local health_status = util.HealthToString(health, client:GetMaxHealth())
       draw.SimpleText(L[health_status], "TabLarge", x + margin*2, health_y + bar_height/2, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
    end
 
@@ -281,12 +281,11 @@ local function InfoPaint(client)
       if hastetime < 0 then
          if (not is_traitor) or (math.ceil(CurTime()) % 7 <= 2) then
             -- innocent or blinking "overtime"
-            text = L.overtime
-            font = "Trebuchet18"
+            text  = "\195\184" .. util.SimpleTime(math.abs(hastetime), "%02i:%02i")
+            font = "TimeLeft"
 
             -- need to hack the position a little because of the font switch
-            ry = ry + 5
-            rx = rx - 3
+            rx = rx - 5
          else
             -- traitor and not blinking "overtime" right now, so standard endtime display
             text  = util.SimpleTime(math.max(0, endtime), "%02i:%02i")
@@ -365,12 +364,10 @@ function GM:HUDPaint()
 end
 
 -- Hide the standard HUD stuff
-local hud = {"CHudHealth", "CHudBattery", "CHudAmmo", "CHudSecondaryAmmo"}
+local hud = {["CHudHealth"] = true, ["CHudBattery"] = true, ["CHudAmmo"] = true, ["CHudSecondaryAmmo"] = true}
 function GM:HUDShouldDraw(name)
-   for k, v in pairs(hud) do
-      if name == v then return false end
-   end
+   if hud[name] then return false end
 
-   return true
+   return self.BaseClass.HUDShouldDraw(self, name)
 end
 
